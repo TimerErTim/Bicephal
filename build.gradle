@@ -1,0 +1,41 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.jetbrains.kotlin.jvm' version '1.6.0'
+    id 'org.openjfx.javafxplugin' version '0.0.10'
+}
+
+group 'eu.timerertim.bicephal'
+version '0.1.0-SNAPSHOT'
+
+application {
+    mainClass = 'eu.timerertim.bicephal.HelloApplicationKt'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation "org.jetbrains.kotlin:kotlin-stdlib"
+
+    implementation "com.github.almasb:fxgl:17"
+
+    testImplementation('org.junit.jupiter:junit-jupiter-api:5.8.2')
+    testRuntimeOnly('org.junit.jupiter:junit-jupiter-engine:5.8.2')
+}
+
+[compileKotlin, compileTestKotlin].forEach {
+    it.kotlinOptions {
+        jvmTarget = '17'
+    }
+}
+
+javafx {
+    version = '17'
+    modules = ['javafx.controls', 'javafx.graphics', 'javafx.fxml', 'javafx.media']
+}
+
+test {
+    useJUnitPlatform()
+}
