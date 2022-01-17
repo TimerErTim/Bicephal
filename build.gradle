@@ -9,7 +9,7 @@ group 'eu.timerertim.bicephal'
 version '0.1.0-SNAPSHOT'
 
 application {
-    mainClass = 'eu.timerertim.bicephal.HelloApplicationKt'
+    mainClass = 'eu.timerertim.bicephal.Main'
 }
 
 repositories {
