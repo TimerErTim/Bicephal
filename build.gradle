@@ -5,11 +5,11 @@ plugins {
     id 'org.openjfx.javafxplugin' version '0.0.10'
 }
 
-group 'eu.timerertim.bicephal'
+group 'eu.timerertim.coobra'
 version '0.1.0-SNAPSHOT'
 
 application {
-    mainClass = 'eu.timerertim.bicephal.Main'
+    mainClass = 'eu.timerertim.coobra.Main'
 }
 
 repositories {
