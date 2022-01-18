@@ -5,6 +5,7 @@ import com.almasb.fxgl.app.GameSettings;
 import com.almasb.fxgl.dsl.FXGL;
 import eu.timerertim.coobra.grid.Cell;
 import eu.timerertim.coobra.grid.CellState;
+import eu.timerertim.coobra.scene.SnakeSceneFactory;
 import javafx.scene.Cursor;
 
 import java.awt.*;
@@ -24,16 +25,20 @@ public class Main extends GameApplication {
 
     @Override
     public void initSettings(GameSettings settings) {
-        // Get size of screen
-        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        settings.setWidth((int) size.getWidth() / 2);
-        settings.setHeight((int) size.getHeight() / 2);
-        settings.setWidthFromRatio(1);
         settings.setTitle("Coobra - Snake Multiplayer");
         settings.setAppIcon("snake_icon.png");
         settings.setVersion("");
+
+        // Get size of screen
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        settings.setHeight((int) (size.getHeight() / 1.25));
+        settings.setWidthFromRatio(1);
+
         settings.setManualResizeEnabled(true);
         settings.setPreserveResizeRatio(true);
+
+        settings.setSceneFactory(SnakeSceneFactory.INSTANCE);
+        settings.setNative(true);
     }
 
     @Override
@@ -54,5 +59,4 @@ public class Main extends GameApplication {
             }
         }
     }
-
 }
