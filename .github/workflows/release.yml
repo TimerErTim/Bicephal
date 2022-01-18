@@ -1,0 +1,46 @@
+name: Package and Release
+
+on:
+  workflow_dispatch:
+
+  release:
+    types: [ published, created, edited ]
+
+jobs:
+  test:
+    name: Build and Test
+    uses: TimerErTim/Coobra/.github/workflows/test.yml@master
+
+  release:
+    name: Package and Release
+    runs-on: ${{ matrix.os }}
+    needs: test
+    strategy:
+      matrix:
+        os: [ macos-latest, ubuntu-latest, windows-latest ]
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+
+      - name: Setup JDK 17
+        id: jdk17_setup
+        uses: actions/setup-java@v2
+        with:
+          java-version: 17
+          distribution: temurin
+
+      - name: Verify Gradle Wrapper
+        uses: gradle/wrapper-validation-action@v1.0.4
+
+      - name: Create Portable
+        uses: gradle/gradle-build-action@v2
+        with:
+          arguments: "jpackageImage"
+
+      - name: Upload Portable
+        uses: actions/upload-artifact@v2
+        with:
+          name: ${{ runner.os }}-portable
+          path: build/jpackage/
+          if-no-files-found: error
