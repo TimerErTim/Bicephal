@@ -2,36 +2,38 @@ package eu.timerertim.coobra;
 
 import com.almasb.fxgl.app.GameApplication;
 import com.almasb.fxgl.app.GameSettings;
+import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.dsl.FXGL;
+import eu.timerertim.coobra.arguments.Argument;
+import eu.timerertim.coobra.arguments.ArgumentTable;
 import eu.timerertim.coobra.grid.Cell;
 import eu.timerertim.coobra.grid.CellState;
 import eu.timerertim.coobra.scene.SnakeSceneFactory;
 import javafx.scene.Cursor;
 
-import java.awt.*;
+import java.util.EnumSet;
 
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 
 public class Main extends GameApplication {
 
-    private final int GRID_CELL_SIZE = 10;
-    private final int CELL_SIZE = 44;
+    private final int GRID_CELL_SIZE = 25;
+    private final int CELL_SIZE = 40;
 
-    private Cell[][] grid = new Cell[GRID_CELL_SIZE][GRID_CELL_SIZE];
+    private final Cell[][] grid = new Cell[GRID_CELL_SIZE][GRID_CELL_SIZE];
 
     public static void main(String[] args) {
+        ArgumentTable.parse(args);
         launch(args);
     }
 
     @Override
     public void initSettings(GameSettings settings) {
-        settings.setTitle("Coobra - Snake Multiplayer");
+        settings.setTitle(ArgumentTable.get(Argument.TITLE));
         settings.setAppIcon("snake_icon.png");
-        settings.setVersion("");
+        settings.setVersion(ArgumentTable.get(Argument.VERSION));
 
-        // Get size of screen
-        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
-        settings.setHeight((int) (size.getHeight() / 1.25));
+        settings.setHeight(1024);
         settings.setWidthFromRatio(1);
 
         settings.setManualResizeEnabled(true);
@@ -39,11 +41,15 @@ public class Main extends GameApplication {
 
         settings.setSceneFactory(SnakeSceneFactory.INSTANCE);
         settings.setNative(true);
+
+        settings.setEnabledMenuItems(EnumSet.of(MenuItem.EXTRA));
+        settings.setCredits(ArgumentTable.get(Argument.CREDITS));
+        settings.setDeveloperMenuEnabled(ArgumentTable.get(Argument.DEVELOPER_MODE));
     }
 
     @Override
     public void initUI() {
-        getGameScene().getRoot().setCursor(Cursor.DEFAULT);
+        getGameScene().setCursor(Cursor.DEFAULT);
     }
 
     @Override
