@@ -7,6 +7,8 @@ import javafx.scene.Cursor;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
+import java.awt.*;
+
 import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 
 public class Main extends GameApplication {
@@ -16,9 +18,13 @@ public class Main extends GameApplication {
 
     @Override
     public void initSettings(GameSettings settings) {
-        settings.setWidth(720);
-        settings.setHeight(640);
-        settings.setTitle("Kotlin Game - Target Practice");
+        // Get size of screen
+        Dimension size = Toolkit.getDefaultToolkit().getScreenSize();
+        settings.setWidth((int) size.getWidth() / 2);
+        settings.setHeight((int) size.getHeight() / 2);
+        settings.setTitle("Coobra - Snake Multiplayer");
+        settings.setAppIcon("snake_icon.png");
+        settings.setVersion("");
         settings.setManualResizeEnabled(true);
         settings.setPreserveResizeRatio(true);
     }
