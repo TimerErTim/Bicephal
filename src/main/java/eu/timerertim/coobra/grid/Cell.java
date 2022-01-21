@@ -4,14 +4,12 @@ import javafx.scene.layout.StackPane;
 import javafx.scene.paint.Color;
 import javafx.scene.shape.Rectangle;
 
-import static eu.timerertim.coobra.grid.CellState.SnakeHead;
-
 
 public class Cell extends StackPane {
-    private int x;
-    private int y;
+    private final int x;
+    private final int y;
     private CellState state;
-    private Rectangle content;
+    private final Rectangle content;
 
     public Cell(int x, int y, CellState state, int cellSize) {
         this.x = x;
@@ -22,9 +20,13 @@ public class Cell extends StackPane {
         setTranslateY(y * cellSize);
 
         Rectangle rect = new Rectangle(cellSize, cellSize, Color.WHITE);
-        rect.setStroke(Color.BLACK);
+        rect.setStroke(Color.color(0.75, 0.75, 0.75, 0.5));
         content = rect;
         getChildren().add(rect);
+    }
+
+    public CellState getCellState() {
+        return state;
     }
 
     public void setCellState(CellState state) {
@@ -34,5 +36,6 @@ public class Cell extends StackPane {
             case SnakeBody -> content.setFill(Color.GREEN);
             case Food -> content.setFill(Color.RED);
         }
+        this.state = state;
     }
 }

@@ -2,24 +2,30 @@ package eu.timerertim.coobra.components;
 
 import com.almasb.fxgl.entity.component.Component;
 import eu.timerertim.coobra.Main;
+import eu.timerertim.coobra.grid.Cell;
 import eu.timerertim.coobra.grid.CellState;
+import eu.timerertim.coobra.grid.Grid;
 import javafx.util.Pair;
 
 import java.util.LinkedList;
 
 public class SnakeComponent extends Component {
+    private final Grid grid;
     private int xPos;
     private int yPos;
     private String direction = "";
+    private int length;
     private final LinkedList<Pair<Integer, Integer>> snakeParts = new LinkedList<>();
 
-    public SnakeComponent(int xPos, int yPos) {
+    public SnakeComponent(int xPos, int yPos, Grid grid) {
         this.xPos = xPos;
         this.yPos = yPos;
+        this.grid = grid;
+        this.length = 2;
+    }
 
-        for (int i = 0; i < 10; i++) {
-            snakeParts.add(new Pair<>(xPos, yPos));
-        }
+    public void addParts(int parts) {
+        length += parts;
     }
 
     @Override
@@ -34,13 +40,17 @@ public class SnakeComponent extends Component {
         }
         if (yPos < 0) yPos = Main.GRID_CELL_SIZE - 1;
         if (xPos < 0) xPos = Main.GRID_CELL_SIZE - 1;
-        Pair<Integer, Integer> newHead = new Pair<>(xPos % Main.GRID_CELL_SIZE, yPos % Main.GRID_CELL_SIZE);
-        Pair<Integer, Integer> lastPart = snakeParts.poll();
-        Main.grid[lastPart.getKey()][lastPart.getValue()].setCellState(CellState.Empty);
+        Pair<Integer, Integer> newHead = new Pair<>(xPos % grid.getWidth(), yPos % grid.getHeight());
+        if (snakeParts.size() > length) {
+            Pair<Integer, Integer> lastPart = snakeParts.poll();
+            grid.getCells()[lastPart.getKey()][lastPart.getValue()].setCellState(CellState.Empty);
+        }
         snakeParts.forEach(p -> {
-            Main.grid[p.getKey()][p.getValue()].setCellState(CellState.SnakeBody);
+            grid.getCells()[p.getKey()][p.getValue()].setCellState(CellState.SnakeBody);
         });
-        Main.grid[newHead.getKey()][newHead.getValue()].setCellState(CellState.SnakeHead);
+        Cell newHeadCell = grid.getCells()[newHead.getKey()][newHead.getValue()];
+        if (newHeadCell.getCellState() == CellState.Food) addParts(2);
+        newHeadCell.setCellState(CellState.SnakeHead);
         snakeParts.add(newHead);
     }
 

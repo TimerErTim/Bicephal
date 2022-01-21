@@ -6,9 +6,9 @@ import com.almasb.fxgl.app.MenuItem;
 import com.almasb.fxgl.entity.Entity;
 import eu.timerertim.coobra.arguments.Argument;
 import eu.timerertim.coobra.arguments.ArgumentTable;
+import eu.timerertim.coobra.components.FoodComponent;
 import eu.timerertim.coobra.components.SnakeComponent;
-import eu.timerertim.coobra.grid.Cell;
-import eu.timerertim.coobra.grid.CellState;
+import eu.timerertim.coobra.grid.Grid;
 import eu.timerertim.coobra.scene.SnakeSceneFactory;
 import javafx.scene.Cursor;
 import javafx.scene.input.KeyCode;
@@ -20,16 +20,13 @@ import static com.almasb.fxgl.dsl.FXGLForKtKt.getGameScene;
 
 public class Main extends GameApplication {
 
-    public static final int GRID_CELL_SIZE = 25;
-    private static final int CELL_SIZE = 40;
+    public static final int GRID_CELL_SIZE = 64;
+    private static final int CELL_SIZE = 16;
 
-    public static final Cell[][] grid = new Cell[GRID_CELL_SIZE][GRID_CELL_SIZE];
+    public static Grid grid;
 
     private Entity player;
     private Entity p2;
-
-    private final int xPos = 5;
-    private final int yPos = 5;
 
     public static void main(String[] args) {
         ArgumentTable.parse(args);
@@ -65,23 +62,17 @@ public class Main extends GameApplication {
 
     @Override
     protected void initGame() {
-        for (int y = 0; y < GRID_CELL_SIZE; y++) {
-            for (int x = 0; x < GRID_CELL_SIZE; x++) {
-                Cell cell = new Cell(x, y, CellState.Empty, CELL_SIZE);
-                grid[x][y] = cell;
-                entityBuilder()
-                        .at(x, y)
-                        .view(cell)
-                        .buildAndAttach();
-            }
-        }
+        grid = new Grid(GRID_CELL_SIZE, GRID_CELL_SIZE, CELL_SIZE);
+        entityBuilder().view(grid).buildAndAttach();
 
         getGameWorld().addEntityFactory(new SnakeGameFactory());
         this.player = spawn("snakeHead");
-        player.addComponent(new SnakeComponent(xPos, yPos));
+        player.addComponent(new SnakeComponent(5, 5, grid));
 
         this.p2 = spawn("snakeHead");
-        p2.addComponent(new SnakeComponent(0, 0));
+        p2.addComponent(new SnakeComponent(0, 0, grid));
+
+        entityBuilder().with(new FoodComponent(2, grid)).buildAndAttach();
     }
 
     @Override
