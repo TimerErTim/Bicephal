@@ -9,7 +9,7 @@ plugins {
 }
 
 group = "eu.timerertim.coobra"
-version = "0.1.0"
+version = "1.0.0"
 
 application {
     mainClass.set("eu.timerertim.coobra.Main")
